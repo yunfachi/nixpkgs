@@ -175,13 +175,30 @@ rec {
     else
       f.type;
 
-  # Default type functor
-  defaultFunctor = name: {
-    inherit name;
-    type = lib.types.${name} or null;
-    payload = null;
-    binOp = a: b: null;
-  };
+    # Default type functor
+    defaultFunctor = self: {
+      /*
+        TODO: Uncomment after refactoring
+
+        lib.warnIfNot (isAttrs self)
+        ''
+          Passing name to `types.defaultFunctor` is deprecated.
+          You should pass `self` of the function instead:
+          ```nix
+            lib.types.mkOptionType (self: {
+              name = "${lib.escape [ "\"" ] self}";
+              functor = lib.types.defaultFunctor self;
+              # ...
+            })
+          ```
+        ''
+      */
+      name = if isAttrs self then self.name else self;
+      type = if isAttrs self then self.__constructor__ else types.${self} or null;
+      wrapped = null;
+      payload = null;
+      binOp = a: b: null;
+    };
 
     isOptionType = isType "option-type";
     mkOptionType =
