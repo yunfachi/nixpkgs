@@ -1880,44 +1880,42 @@ rec {
       nestedTypes.finalType = finalType;
     };
 
-  /**
-    Augment the given type with an additional type check function.
-
-    :::{.warning}
-    This function has some broken behavior see: [#396021](https://github.com/NixOS/nixpkgs/issues/396021)
-    Fixing is not trivial, we appreciate any help!
-    :::
-  */
-  addCheck =
-    elemType: check:
-    if elemType.merge ? v2 then
-      elemType
-      // {
-        check = {
-          __functor = _self: x: elemType.check x && check x;
-          isV2MergeCoherent = true;
-        };
-        merge = {
-          __functor =
-            self: loc: defs:
-            (self.v2 { inherit loc defs; }).value;
-          v2 =
-            { loc, defs }@args:
-            let
-              orig = checkV2MergeCoherence loc elemType (elemType.merge.v2 args);
-              headError' = if orig.headError != null then orig.headError else checkDefsForError check loc defs;
-            in
-            orig
-            // {
-              headError = headError';
-            };
-        };
-      }
-    else
-      elemType
-      // {
-        check = x: elemType.check x && check x;
-      };
+      /**
+        Augment the given type with an additional type check function.
+      */
+      
+      addCheck =
+        elemType: check:
+        if elemType.merge ? v2 then
+          elemType.extend (
+            final: prev: {
+              check = {
+                __functor = _self: x: prev.check x && check x;
+                isV2MergeCoherent = true;
+              };
+              merge = {
+                __functor =
+                  self: loc: defs:
+                  (self.v2 { inherit loc defs; }).value;
+                v2 =
+                  { loc, defs }@args:
+                  let
+                    orig = checkV2MergeCoherence loc elemType (prev.merge.v2 args);
+                    headError' = if orig.headError != null then orig.headError else checkDefsForError check loc defs;
+                  in
+                  orig
+                  // {
+                    headError = headError';
+                  };
+              };
+            }
+          )
+        else
+          elemType.extend (
+            final: prev: {
+              check = x: prev.check x && check x;
+            }
+          );
 
   /**
     Merges two option types together.
