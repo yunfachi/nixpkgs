@@ -147,12 +147,14 @@ in
 rec {
   isType = type: x: (x._type or "") == type;
 
-  setType =
-    typeName: value:
-    value
-    // {
-      _type = typeName;
-    };
+    setType =
+      typeName: value:
+      let
+        ext = {
+          _type = typeName;
+        };
+      in
+      if value ? extend then value.extend (final: prev: ext) else value // ext;
 
   # Default type merging function
   # takes two type functors and return the merged type
