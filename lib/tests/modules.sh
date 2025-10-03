@@ -524,23 +524,26 @@ checkConfigOutput '^"description-based"$' options.descriptionBasedOption.type.de
 checkConfigOutput '^"parametric-name-suffix"$' options.parametricOption.type.name ./option-type-extending.nix
 checkConfigOutput '^"parametric"$' options.parametricOption.type.description ./option-type-extending.nix
 
-checkConfigOutput '^"parametricUncall-too-name-suffix"$' options.parametricUncallOption.type.name ./option-type-extending.nix
-checkConfigOutput '^"parametricUncall"$' options.parametricUncallOption.type.description ./option-type-extending.nix
+checkConfigOutput '^"parametricConstructor-too-name-suffix"$' options.parametricConstructorOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"parametricConstructor"$' options.parametricConstructorOption.type.description ./option-type-extending.nix
 
 checkConfigOutput '^"extendedParametric"$' options.extendedParametricOption.type.name ./option-type-extending.nix
 checkConfigOutput '^"extendedParametric-description-suffix"$' options.extendedParametricOption.type.description ./option-type-extending.nix
 
-checkConfigOutput '^"extendedParametricUncall"$' options.extendedParametricUncallOption.type.name ./option-type-extending.nix
-checkConfigOutput '^"extendedParametricUncall-description-suffix"$' options.extendedParametricUncallOption.type.description ./option-type-extending.nix
+checkConfigOutput '^"extendedParametricConstructor"$' options.extendedParametricConstructorOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"extendedParametricConstructor-description-suffix"$' options.extendedParametricConstructorOption.type.description ./option-type-extending.nix
 
-checkConfigOutput '^"simple"$' options.simpleUncallOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"simple"$' options.simpleConstructorOption.type.name ./option-type-extending.nix
 
-checkConfigOutput '^"description-based"$' options.descriptionBasedUncallOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"description-based"$' options.descriptionBasedConstructorOption.type.name ./option-type-extending.nix
 
 checkConfigOutput '^"extendedSimple \(extended simple\)"$' options.extendedSimpleOption.type.name ./option-type-extending.nix
 
 checkConfigOutput '^"description-based-extendedDescription"$' options.extendedDescriptionOption.type.name ./option-type-extending.nix
 checkConfigOutput '^"description-based-extendedDescription"$' options.extendedDescriptionOption.type.description ./option-type-extending.nix
+
+# Check option type merging with extended types
+checkConfigError 'A definition for option .foo. is not of type .string.. Definition values:\n\s*- In .*: "wrong start"' config.foo ./option-type-merging-with-extended.nix
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \

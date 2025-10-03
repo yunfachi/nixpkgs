@@ -25,9 +25,9 @@
           "-name-suffix";
 
       # `__constructor__` testing for different types
-      simpleUncall = simpleType.__constructor__;
-      descriptionBasedUncall = descriptionBasedType.__constructor__;
-      parametricUncall = parametricType.__constructor__ "parametricUncall" "-too-name-suffix";
+      simpleConstructor = simpleType.__constructor__;
+      descriptionBasedConstructor = descriptionBasedType.__constructor__;
+      parametricConstructor = parametricType.__constructor__ "parametricConstructor" "-too-name-suffix";
 
       # extend testing on `__constructor__`'ed parametric type
       extendedParametricType = (parametricType.__constructor__ "extendedParametric" "fake").extend (
@@ -38,7 +38,7 @@
       );
 
       # Testing `__constructor__` after extend
-      extendedParametricUncall = extendedParametricType.__constructor__ "extendedParametricUncall" "fake";
+      extendedParametricConstructor = extendedParametricType.__constructor__ "extendedParametricConstructor" "fake";
 
       # extend on simple and description-based types
       extendedSimpleType = simpleType.extend (
@@ -58,11 +58,11 @@
       simpleOption = lib.mkOption { type = simpleType; };
       descriptionBasedOption = lib.mkOption { type = descriptionBasedType; };
       parametricOption = lib.mkOption { type = parametricType; };
-      parametricUncallOption = lib.mkOption { type = parametricUncall; };
+      parametricConstructorOption = lib.mkOption { type = parametricConstructor; };
       extendedParametricOption = lib.mkOption { type = extendedParametricType; };
-      extendedParametricUncallOption = lib.mkOption { type = extendedParametricUncall; };
-      simpleUncallOption = lib.mkOption { type = simpleUncall; };
-      descriptionBasedUncallOption = lib.mkOption { type = descriptionBasedUncall; };
+      extendedParametricConstructorOption = lib.mkOption { type = extendedParametricConstructor; };
+      simpleConstructorOption = lib.mkOption { type = simpleConstructor; };
+      descriptionBasedConstructorOption = lib.mkOption { type = descriptionBasedConstructor; };
       extendedSimpleOption = lib.mkOption { type = extendedSimpleType; };
       extendedDescriptionOption = lib.mkOption { type = extendedDescriptionType; };
     };
